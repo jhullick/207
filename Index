@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
   <head>
-    <title>Trove Words</title>
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  	<meta charset="UTF-8">
+  	<title>Trove Words</title>
+    	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
   </head>
 
   <header>
