@@ -1,14 +1,152 @@
 <!DOCTYPE html>
-
-<html lang='en'>
+<html>
 
   <head>
-    <meta charset="UTF-8">
-    <title>Trove Word Search</title>
+    <title>Trove Words</title>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
   </head>
-  
+
+  <header>
+  </header>
+
   <body>
-  
+    <p> Reference: view-source:http://deco1800.uqcloud.net/examples/basicTroveSearch.html?#</p>
+
+	    <form action ="#" id="searchTrove">
+    		<h3>Search</h3>
+    		<input id="searchTerm" type="text" />
+    		<h3>Number Of Words</h3>
+    		<input id="numberSelect" type="number" />
+    		<select id="sortBy">
+    			<option>relevance</option>
+    			<option>dateasc</option>
+    			<option>datedesc</option>
+    		</select>
+    		
+    		<button type="submit" id="searchbtn">Search</button>
+    	</form>
+    	
+    	<div id="searchTitle">
+    	</div>
+    
+    	<div id="output">
+    		<h4>Search Results</h4>
+    		
+    		
+    		
+    		
+    	</div>
+    
+    
+    	<script type="text/javascript">
+    		var apiKey = "1nnn6t7d804o8dt1";
+    		$(document).ready(function(){
+    		$("form#searchTrove").submit();
+    
+    		$("form#searchTrove").submit(function(){
+    
+    			var searchTerm= $("#searchTerm").val();
+    			var searchZone = "newspaper";
+    			var sortBy = $("#sortBy").val();
+    			var date = " date:[1980 TO 2016]";
+    			var numberOfWords= $("#numberSelect").val();
+    			$("#searchTitle").append(searchTerm);
+    
+    			var url = "http://api.trove.nla.gov.au/result?key=" + apiKey + "&encoding=json&zone=" + searchZone + 
+    				    "&sortby=" + sortBy + "&q=" + searchTerm + date + "&s=0&n=1&include=articletext,pdf&encoding=json&callback=?";
+    
+    			console.log(url);
+    			
+    			$.getJSON(url, function(data) {
+    
+    				$("#output").empty();
+    				$.each(data.response.zone[0].records.article, function(index,value){
+    					var articleData = value.articleText;
+    					console.log(articleData);
+    
+    					function removeTags(words){
+    					
+    						var span_tag = /<span>/g;
+    						var p_tag = /<p>/g;
+    						var end_p_tag= /<\/p>/g;
+    						var end_span_tag= /<\/span>/g;
+    						var str = words.toString();
+    						var get_rid_tags = str.replace(span_tag,"").replace(p_tag,"").replace(end_p_tag,"").replace(end_span_tag,"").replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ").replace(/^\d+$/g,"");
+    						
+    						
+    						var tagless = get_rid_tags.split(' ');
+    						
+    						
+    						return tagless;
+    						
+    						
+    					};
+    					
+    					var articleArray = removeTags(articleData);
+    					console.log(articleArray);
+    					
+    					
+    					if (articleArray.length>25&&articleArray.length<10000){
+    					
+    						var filter_words= 'a,A,it,It,was,Was,the,it,will,what,from,only,their,with,is,we,all,a,an,by,this,those,that,could,to,you,me,he,she,they,we,how,it,i,are,to,for,of,in,or,out,on,at,so,be,The,around,and,said,have,that,when,were,new,Ill,to,<span>,<p><span>,</p></span>,, ,.,(,),`,~,!,@,#,$,%,^,&,*,-,_,=,+,{,[,],}.|,\,:,;,<,>,?,",/,/,-,1,2,3,4,5,6,7,8,9,10,';
+    						var filter = filter_words.split(',');	
+    						var dict=[];
+    						
+    					
+    						
+    						for(var i=0;i<articleArray.length;i++){
+    							
+    							if (($.inArray(articleArray[i],filter))==-1&&articleArray[i].length>4){
+    								dict.push(articleArray[i]);
+    							
+    							};
+    						}; 
+    						
+    						
+    						var finalWordList = [];
+    						
+    						for(var i=0;i<numberOfWords;i++){
+    							
+    						
+    							var randomiser = Math.floor(Math.random() * dict.length)
+    							var randomElement = dict[randomiser]
+    							finalWordList.push(' ' + randomElement.toLowerCase());
+    							
+    						};
+    						
+    						$("#output").append("<p>" + finalWordList + "</p><hr/>");
+    						
+    						
+    						function getLetters(word){
+    							var letters = []
+    						
+    							for(var i=0;i<word.length;i++){
+    							letters.push(word[i]);
+    						
+    							};
+    						
+    						};
+    					
+    					
+    						
+    						console.log(dict);
+    						console.log(finalWordList);
+    						};
+    					
+    						
+    					});
+    				
+    					
+    				});
+    				
+    				});
+    				});
+    	
+    	</script>
+
   </body>
 
+  <footer>
+  </footer>
+  
 </html>
