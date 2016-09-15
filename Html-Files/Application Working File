@@ -1,152 +1,409 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-  	<meta charset="UTF-8">
-  	<title>Trove Words</title>
-    	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-  </head>
+<html>
 
-  <header>
-  </header>
+<head>
+<title>Trove Words</title>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="stylesheet.css">
+</head>
 
-  <body>
-    <p> Reference: view-source:http://deco1800.uqcloud.net/examples/basicTroveSearch.html?#</p>
+<header>
 
-	    <form action ="#" id="searchTrove">
-    		<h3>Search</h3>
-    		<input id="searchTerm" type="text" />
-    		<h3>Number Of Words</h3>
-    		<input id="numberSelect" type="number" />
-    		<select id="sortBy">
-    			<option>relevance</option>
-    			<option>dateasc</option>
-    			<option>datedesc</option>
-    		</select>
-    		
-    		<button type="submit" id="searchbtn">Search</button>
-    	</form>
-    	
-    	<div id="searchTitle">
-    	</div>
-    
-    	<div id="output">
-    		<h4>Search Results</h4>
-    		
-    		
-    		
-    		
-    	</div>
-    
-    
-    	<script type="text/javascript">
-    		var apiKey = "1nnn6t7d804o8dt1";
-    		$(document).ready(function(){
-    		$("form#searchTrove").submit();
-    
-    		$("form#searchTrove").submit(function(){
-    
-    			var searchTerm= $("#searchTerm").val();
-    			var searchZone = "newspaper";
-    			var sortBy = $("#sortBy").val();
-    			var date = " date:[1980 TO 2016]";
-    			var numberOfWords= $("#numberSelect").val();
-    			$("#searchTitle").append(searchTerm);
-    
-    			var url = "http://api.trove.nla.gov.au/result?key=" + apiKey + "&encoding=json&zone=" + searchZone + 
-    				    "&sortby=" + sortBy + "&q=" + searchTerm + date + "&s=0&n=1&include=articletext,pdf&encoding=json&callback=?";
-    
-    			console.log(url);
-    			
-    			$.getJSON(url, function(data) {
-    
-    				$("#output").empty();
-    				$.each(data.response.zone[0].records.article, function(index,value){
-    					var articleData = value.articleText;
-    					console.log(articleData);
-    
-    					function removeTags(words){
-    					
-    						var span_tag = /<span>/g;
-    						var p_tag = /<p>/g;
-    						var end_p_tag= /<\/p>/g;
-    						var end_span_tag= /<\/span>/g;
-    						var str = words.toString();
-    						var get_rid_tags = str.replace(span_tag,"").replace(p_tag,"").replace(end_p_tag,"").replace(end_span_tag,"").replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ").replace(/^\d+$/g,"");
-    						
-    						
-    						var tagless = get_rid_tags.split(' ');
-    						
-    						
-    						return tagless;
-    						
-    						
-    					};
-    					
-    					var articleArray = removeTags(articleData);
-    					console.log(articleArray);
-    					
-    					
-    					if (articleArray.length>25&&articleArray.length<10000){
-    					
-    						var filter_words= 'a,A,it,It,was,Was,the,it,will,what,from,only,their,with,is,we,all,a,an,by,this,those,that,could,to,you,me,he,she,they,we,how,it,i,are,to,for,of,in,or,out,on,at,so,be,The,around,and,said,have,that,when,were,new,Ill,to,<span>,<p><span>,</p></span>,, ,.,(,),`,~,!,@,#,$,%,^,&,*,-,_,=,+,{,[,],}.|,\,:,;,<,>,?,",/,/,-,1,2,3,4,5,6,7,8,9,10,';
-    						var filter = filter_words.split(',');	
-    						var dict=[];
-    						
-    					
-    						
-    						for(var i=0;i<articleArray.length;i++){
-    							
-    							if (($.inArray(articleArray[i],filter))==-1&&articleArray[i].length>4){
-    								dict.push(articleArray[i]);
-    							
-    							};
-    						}; 
-    						
-    						
-    						var finalWordList = [];
-    						
-    						for(var i=0;i<numberOfWords;i++){
-    							
-    						
-    							var randomiser = Math.floor(Math.random() * dict.length)
-    							var randomElement = dict[randomiser]
-    							finalWordList.push(' ' + randomElement.toLowerCase());
-    							
-    						};
-    						
-    						$("#output").append("<p>" + finalWordList + "</p><hr/>");
-    						
-    						
-    						function getLetters(word){
-    							var letters = []
-    						
-    							for(var i=0;i<word.length;i++){
-    							letters.push(word[i]);
-    						
-    							};
-    						
-    						};
-    					
-    					
-    						
-    						console.log(dict);
-    						console.log(finalWordList);
-    						};
-    					
-    						
-    					});
-    				
-    					
-    				});
-    				
-    				});
-    				});
-    	
-    	</script>
+</header>
 
-  </body>
+<body>
+<p> Reference: view-source:http://deco1800.uqcloud.net/examples/basicTroveSearch.html?#</p>
 
-  <footer>
-  </footer>
-  
+	<form action ="#" id="searchTrove">
+		<h3>Search</h3>
+		<input id="searchTerm" type="text" />
+		<h3>Number Of Words</h3>
+		<input id="numberSelect" type="number" />
+		<select id="sortBy">
+			<option>relevance</option>
+			<option>dateasc</option>
+			<option>datedesc</option>
+		</select>
+		
+		<button type="submit" id="searchbtn">Search</button>
+	</form>
+	
+	<div id="searchTitle">
+	</div>
+
+	<div id="output">
+		<h4>Search Results</h4>
+	</div>
+	
+	
+	<div id="wordsearch">
+		
+		<table cellspacing=0>
+	
+			<tr>
+				<td id="tr_1">a</td>
+				<td id="tr_2">b</td>
+				<td id="tr_3">c</td>
+				<td id="tr_4">d</td>
+				<td id="tr_5">e</td>
+				<td id="tr_6">f</td>
+				<td id="tr_7">g</td>
+				<td id="tr_8">h</td>
+				<td id="tr_9">i</td>
+				<td id="tr_10">j</td>
+			</tr>
+			<tr>
+				<td id="tr_11">a</td>
+				<td id="tr_12">b</td>
+				<td id="tr_13">c</td>
+				<td id="tr_14">d</td>
+				<td id="tr_15">e</td>
+				<td id="tr_16">f</td>
+				<td id="tr_17">g</td>
+				<td id="tr_18">h</td>
+				<td id="tr_19">i</td>
+				<td id="tr_20">j</td>
+			</tr>
+			<tr>
+				<td id="tr_21">a</td>
+				<td id="tr_22">b</td>
+				<td id="tr_23">c</td>
+				<td id="tr_24">d</td>
+				<td id="tr_25">e</td>
+				<td id="tr_26">f</td>
+				<td id="tr_27">g</td>
+				<td id="tr_28">h</td>
+				<td id="tr_29">i</td>
+				<td id="tr_30">j</td>
+			</tr>
+			<tr>
+				<td id="tr_31">a</td>
+				<td id="tr_32">b</td>
+				<td id="tr_33">c</td>
+				<td id="tr_34">d</td>
+				<td id="tr_35">e</td>
+				<td id="tr_36">f</td>
+				<td id="tr_37">g</td>
+				<td id="tr_38">h</td>
+				<td id="tr_39">i</td>
+				<td id="tr_40">j</td>
+			</tr>
+			<tr>
+				<td id="tr_41">a</td>
+				<td id="tr_42">b</td>
+				<td id="tr_43">c</td>
+				<td id="tr_44">d</td>
+				<td id="tr_45">e</td>
+				<td id="tr_46">f</td>
+				<td id="tr_47">g</td>
+				<td id="tr_48">h</td>
+				<td id="tr_49">i</td>
+				<td id="tr_50">j</td>
+			</tr>
+			<tr>
+				<td id="tr_51">a</td>
+				<td id="tr_52">b</td>
+				<td id="tr_53">c</td>
+				<td id="tr_54">d</td>
+				<td id="tr_55">e</td>
+				<td id="tr_56">f</td>
+				<td id="tr_57">g</td>
+				<td id="tr_58">h</td>
+				<td id="tr_59">i</td>
+				<td id="tr_60">j</td>
+			</tr>
+			<tr>
+				<td id="tr_61">a</td>
+				<td id="tr_62">b</td>
+				<td id="tr_63">c</td>
+				<td id="tr_64">d</td>
+				<td id="tr_65">e</td>
+				<td id="tr_66">f</td>
+				<td id="tr_67">g</td>
+				<td id="tr_68">h</td>
+				<td id="tr_69">i</td>
+				<td id="tr_70">j</td>
+			</tr>
+			<tr>
+				<td id="tr_71">a</td>
+				<td id="tr_72">b</td>
+				<td id="tr_73">c</td>
+				<td id="tr_74">d</td>
+				<td id="tr_75">e</td>
+				<td id="tr_76">f</td>
+				<td id="tr_77">g</td>
+				<td id="tr_78">h</td>
+				<td id="tr_79">i</td>
+				<td id="tr_80">j</td>
+			</tr>
+			<tr>
+				<td id="tr_81">a</td>
+				<td id="tr_82">b</td>
+				<td id="tr_83">c</td>
+				<td id="tr_84">d</td>
+				<td id="tr_85">e</td>
+				<td id="tr_86">f</td>
+				<td id="tr_87">g</td>
+				<td id="tr_88">h</td>
+				<td id="tr_89">i</td>
+				<td id="tr_90">j</td>
+			</tr>
+			<tr>
+				<td id="tr_91">a</td>
+				<td id="tr_92">b</td>
+				<td id="tr_93">c</td>
+				<td id="tr_94">d</td>
+				<td id="tr_95">e</td>
+				<td id="tr_96">f</td>
+				<td id="tr_97">g</td>
+				<td id="tr_98">h</td>
+				<td id="tr_99">i</td>
+				<td id="tr_100">j</td>
+			</tr>
+			
+
+		</table>	
+		
+		
+		
+	</div>
+
+
+	<script type="text/javascript">
+		var apiKey = "1nnn6t7d804o8dt1";
+		$(document).ready(function(){
+		$("form#searchTrove").submit();
+
+		$("form#searchTrove").submit(function(){
+
+			var searchTerm= $("#searchTerm").val();
+			var searchZone = "newspaper";
+			var sortBy = $("#sortBy").val();
+			var date = " date:[1980 TO 2016]";
+			var numberOfWords= $("#numberSelect").val();
+			$("#searchTitle").append(searchTerm);
+			//Builds URL using above variables, changing n= in final term changes number of articles returned
+			var url = "http://api.trove.nla.gov.au/result?key=" + apiKey + "&encoding=json&zone=" + searchZone + 
+				    "&sortby=" + sortBy + "&q=" + searchTerm + date + "&s=0&n=1&include=articletext,pdf&encoding=json&callback=?";
+
+			console.log(url);
+			
+			$.getJSON(url, function(data) {
+				//Empties output 
+				$("#output").empty();
+				//Gets each article returned and does following function on it
+				$.each(data.response.zone[0].records.article, function(index,value){
+					//Puts data from article in variable
+					var articleData = value.articleText;
+					console.log(articleData);
+					
+					
+					
+					
+					//Removes html tags from data using RegEx
+					function removeTags(words){
+					
+						var span_tag = /<span>/g;
+						var p_tag = /<p>/g;
+						var end_p_tag= /<\/p>/g;
+						var end_span_tag= /<\/span>/g;
+						var str = words.toString();
+						var get_rid_tags = str.replace(span_tag,"").replace(p_tag,"").replace(end_p_tag,"").replace(end_span_tag,"").replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ").replace(/^\d+$/g,"");
+						
+						
+						var tagless = get_rid_tags.split(' ');
+						
+						
+						return tagless;
+						
+						
+					};
+					//Removes tags and puts non-filtered words into an array
+					var articleArray = removeTags(articleData);
+					console.log(articleArray);
+					
+
+					//If length of array, ie number of words, is between desired amount, run code
+					if (articleArray.length>25&&articleArray.length<10000){
+					
+						var filter_words= 'a,A,it,It,was,Was,the,it,will,what,from,only,their,with,is,we,all,a,an,by,this,those,that,could,to,you,me,he,she,they,we,how,it,i,are,to,for,of,in,or,out,on,at,so,be,The,around,and,said,have,that,when,were,new,Ill,to,<span>,<p><span>,</p></span>,, ,.,(,),`,~,!,@,#,$,%,^,&,*,-,_,=,+,{,[,],}.|,\,:,;,<,>,?,",/,/,-,1,2,3,4,5,6,7,8,9,10,';
+						var filter = filter_words.split(',');	
+						var dict=[];
+						
+					
+						
+						for(var i=0;i<articleArray.length;i++){
+							//For elements in array, if each is not in the filtered word list, push to dict array
+							if (($.inArray(articleArray[i],filter))==-1&&articleArray[i].length>4){
+								dict.push(articleArray[i]);
+							
+							};
+						}; 
+						
+						
+						var finalWordList = [];
+						
+						for(var i=0;i<numberOfWords;i++){
+							
+							//Randomiser is a random number between 1 and the length of the dict
+							var randomiser = Math.floor(Math.random() * dict.length)
+							//Picks a number according to randomiser
+							var randomElement = dict[randomiser]
+							//Adds random element to final word list in lower case
+							finalWordList.push(' ' + randomElement.toLowerCase());
+							
+						};
+						//Outputs to output div in paragraph format
+						$("#output").append("<p>" + finalWordList + "</p><hr/>");
+						
+						
+						function getLetters(word){
+							var letters = []
+							//For every element in a word, returns an array with letters. i=1 due to previously added space
+							for(var i=1;i<word.length;i++){
+							letters.push(word[i]);
+						
+							};
+							return letters;
+						
+						};
+						
+						test = ['c','a','t'];
+						usedPositions = [];
+						
+						//Function adds word to wordsearch
+						function addWord(lettersArray){
+						//If array of letters is less than 10, code is run. Ensures it will fit on grid.
+						if(lettersArray.length<10){
+						
+						
+							//Picks random number between 1 and 100
+							var random_place = Math.floor(Math.random() * 100);
+							//Calculates the space between the number and the nearest 10
+							var space = (Math.ceil(random_place/10)*10)-random_place;
+							
+							console.log(random_place);
+							console.log(space);
+							
+							//Checks if number of letters is smaller than or equal to the space provided
+							if(lettersArray.length<=space){
+								console.log('beat first');
+								
+								for(var i=0;i<lettersArray.length;i++){
+									var possible_positions= []
+									if ($.inArray(possibe_positions[i],usedPositions==-1){
+									
+									
+									
+									}
+									possible_positions.push[random_place+i];
+									
+								
+									//for each element of the letters array, if random co-ordinate + number is not in used positions array
+									if($.inArray((possibe_positions,usedPositions)==-1){
+									
+										for(var i=0;i<lettersArray.length;i++){
+											//deletes whats in table and appends 
+											$("#tr_" +(random_place+i)).empty();
+											$("#tr_"+(random_place+i)).append(lettersArray[i]);
+											
+											//adds that co-ordinate to used postions
+											usedPositions.push(random_place+i);
+											console.log("success");
+										
+										
+											};
+									
+										
+								
+								
+
+										}else{
+										//resets random number and resets loop
+											var random_place = Math.floor(Math.random() * 100);
+											i = i-1;
+									    
+											console.log('position taken');
+									
+									
+										
+									};
+									
+									};
+									
+									
+									
+								}else{
+								console.log("didnt fit");
+								addWord(lettersArray);
+							
+								};
+							};
+							
+							};
+							
+					
+						//For every element in final word list, add word to wordsearch via addWord
+						for(var i=0;i<finalWordList.length;i++){
+						
+							
+							//addWord(getLetters(finalWordList[i]));
+						
+						
+						
+						};
+					
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+				
+						
+						
+						
+						
+						console.log(dict);
+						console.log(finalWordList);
+						};
+					
+						
+					});
+				
+					
+				});
+				
+				});
+				});
+				
+				
+				
+				
+				
+				
+				
+
+
+
+			
+
+
+
+
+
+
+		
+	</script>
+
+</body>
+
+<footer>
+
+</footer>
+
 </html>
